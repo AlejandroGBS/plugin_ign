@@ -2,4 +2,11 @@
     <qresource prefix="/plugins/plugin_ign" >
         <file>icon.png</file>
     </qresource>
+    <qresource prefix="/plugins/plugin_ign/images" >
+        <file>150Aniversario.png</file>
+        <file>bug.png</file>
+        <file>spain_topo.png</file>
+        <file>wms.png</file>
+        <file>cnig-logo.png</file>
+    </qresource>
 </RCC>

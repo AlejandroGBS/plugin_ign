@@ -82,7 +82,6 @@ class PluginIGN:
         # noinspection PyTypeChecker,PyArgumentList,PyCallByClass
         return QCoreApplication.translate('PluginIGN', message)
 
-
     def add_action(
         self,
         icon_path,
@@ -170,7 +169,6 @@ class PluginIGN:
         # will be set False in run()
         self.first_start = True
 
-
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
         for action in self.actions:
@@ -179,8 +177,8 @@ class PluginIGN:
                 action)
             self.iface.removeToolBarIcon(action)
 
-
     def run(self):
+
         """Run method that performs all the real work"""
 
         # Create the dialog with elements (after translation) and keep reference
@@ -198,3 +196,74 @@ class PluginIGN:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
             pass
+
+    
+    def geocoder(self):         
+        #crear clase geocoder y desde alli llamar a la ventana de seleccion si es necesario           
+        print(self.cmbbox.currentText())
+        geocoder = Geocoder(self.iface,"cartociudad", "http://www.cartociudad.es/geocoder/api/geocoder/")
+        cmbxText = self.cmbbox.currentText()
+        coord = geocoder.find(cmbxText)
+        if coord != None:
+            self.zoomToPoint(coord[0], coord[1])
+               
+    def addQbuttonFromLayer(self,layer):
+        action = QAction(QIcon(layer.icon), layer.name, self.iface.mainWindow())
+        action.setStatusTip(layer.name)
+        action.triggered.connect(lambda:layer.addLayerToQgis())
+        self.actions.append((self.iface.mainWindow(),action))
+        return action        
+     
+    def convertServicesFromFilesIntoClasses(self,filePath,serviceType):
+        file = open(filePath, "r",encoding="utf-8")
+        services = []
+        
+        if serviceType == "wms":               
+            lines = file.readlines()
+            for line in lines:
+                serviceNameAndUrl = line.split(";")
+                wms = Wms(self.iface,self.iconPathTopo,serviceNameAndUrl[0],serviceNameAndUrl[1])
+                layers = wms.getLayersFromUrlService(serviceNameAndUrl[1])
+                for layer in layers:
+                   wms.layers.append(layer) 
+                services.append(wms)
+        else: #serviceType == "wmts":
+            lines = file.readlines()
+            for line in lines:
+                 serviceNameAndUrl = line.split(";")
+                 wmts = Wmts(self.iface,self.iconPathTopo,serviceNameAndUrl[0],serviceNameAndUrl[1])
+                 layers = wmts.getLayersFromUrlService(serviceNameAndUrl[1])
+                 for layer in layers:
+                     wmts.layers.append(layer)
+                 services.append(wmts)
+
+        file.close()
+        
+        return services      
+        
+    def putLayersIntoQmenu(self,service,menu):
+        for layer in service.layers:
+            layer.setQmenu(menu)
+            menu.addAction(self.addQbuttonFromLayer(layer))
+                
+    def putServicesIntoQmenu(self,services,menu):
+        for service in services:
+            tmpMenu = self.createQmenu(service.name,service.icon)
+            menu.addMenu(tmpMenu)
+            self.putLayersIntoQmenu(service, tmpMenu)
+                      
+    def zoomToRectangule(self, xmin,ymin,xmax, ymax):
+        rect = QgsRectangle(xmin, ymin, xmax, ymax) 
+        mc = self.iface.mapCanvas()
+        mc.setExtent(rect)
+        mc.refresh()
+        
+    def zoomToPoint(self, x, y, scale=None):
+        if not scale:
+            scale = 0.01 if x < 100 else 1000
+
+        xmin = x-scale/2
+        ymin = y-scale/2
+        xmax = x+scale/2
+        ymax = y+scale/2
+        self.zoomToRectangule(xmin, ymin, xmax, ymax)

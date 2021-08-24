@@ -22,7 +22,8 @@
  ***************************************************************************/
  This script initializes the plugin, making it known to QGIS.
 """
-
+from .utils import Utils
+from .plugin_ign import PluginIGN
 
 # noinspection PyPep8Naming
 def classFactory(iface):  # pylint: disable=invalid-name
@@ -32,5 +33,7 @@ def classFactory(iface):  # pylint: disable=invalid-name
     :type iface: QgsInterface
     """
     #
-    from .plugin_ign import PluginIGN
+    u = Utils(iface)
+    u.checkLib('owslib','0.20.0') 
+    
     return PluginIGN(iface)

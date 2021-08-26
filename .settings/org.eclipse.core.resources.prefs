@@ -1,0 +1,9 @@
+eclipse.preferences.version=1
+encoding/__init__.py=utf-8
+encoding/geocoder.py=utf-8
+encoding/geocoder_dialog.py=utf-8
+encoding/layer.py=utf-8
+encoding/plugin_ign.py=utf-8
+encoding/utils.py=utf-8
+encoding/wms.py=utf-8
+encoding/wmts.py=utf-8

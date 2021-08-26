@@ -21,9 +21,10 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication,QSize,QObject,QgsProject,QgsRectangle,QObject
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication,QSize,QObject
 from qgis.PyQt.QtGui import QIcon
 from qgis.PyQt.QtWidgets import QAction,QToolBar,QCheckBox,QLabel,QStatusBar,QMenu,QToolButton,QComboBox
+from qgis.core import QgsProject,QgsRectangle,QgsRasterLayer
 
 # Initialize Qt resources from file resources.py
 from .resources import *

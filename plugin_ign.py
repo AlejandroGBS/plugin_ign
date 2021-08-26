@@ -21,16 +21,22 @@
  *                                                                         *
  ***************************************************************************/
 """
-from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication
+from qgis.PyQt.QtCore import QSettings, QTranslator, QCoreApplication,QSize,QObject,QgsProject,QgsRectangle,QObject
 from qgis.PyQt.QtGui import QIcon
-from qgis.PyQt.QtWidgets import QAction
+from qgis.PyQt.QtWidgets import QAction,QToolBar,QCheckBox,QLabel,QStatusBar,QMenu,QToolButton,QComboBox
 
 # Initialize Qt resources from file resources.py
 from .resources import *
 # Import the code for the dialog
 from .plugin_ign_dialog import PluginIGNDialog
 import os.path
-
+from qgis._core import QgsRasterLayer
+from builtins import *
+from .wmts import Wmts
+from .wms import Wms
+from .geocoder import Geocoder
+from .utils import Utils
+from qgis.utils import iface
 
 class PluginIGN:
     """QGIS Plugin Implementation."""
@@ -61,6 +67,13 @@ class PluginIGN:
 
         # Declare instance attributes
         self.actions = []
+        self.mainAction = None
+        self.toolBars = []
+        self.toolButtons = []
+        self.menus = []
+        self.services = []
+        self.cmbbox = None
+        self.about = None  
         self.menu = self.tr(u'&Plugin IGN ')
 
         # Check if plugin was started the first time in current QGIS session
@@ -68,6 +81,7 @@ class PluginIGN:
         self.first_start = None
 
     # noinspection PyMethodMayBeStatic
+
     def tr(self, message):
         """Get the translation for a string using Qt translation API.
 
@@ -133,9 +147,9 @@ class PluginIGN:
         """
 
         icon = QIcon(icon_path)
-        action = QAction(icon, text, parent)
-        action.triggered.connect(callback)
-        action.setEnabled(enabled_flag)
+        self.mainAction = QAction(icon, text, parent)
+        self.mainAction.triggered.connect(callback)
+        self.mainAction.setEnabled(enabled_flag)
 
         if status_tip is not None:
             action.setStatusTip(status_tip)
@@ -145,37 +159,104 @@ class PluginIGN:
 
         if add_to_toolbar:
             # Adds plugin icon to Plugins toolbar
-            self.iface.addToolBarIcon(action)
+            self.iface.addToolBarIcon(self.mainAction)
 
         if add_to_menu:
             self.iface.addPluginToMenu(
                 self.menu,
-                action)
+                self.mainAction)
 
-        self.actions.append(action)
-
-        return action
+        return self.mainAction
 
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
         icon_path = ':/plugins/plugin_ign/icon.png'
+
+        wmsFilePath=self.plugin_dir +'/wms.txt'
+        wmtsFilePath=self.plugin_dir +'/wmts.txt'
+        self.icon_path = ':/plugins/plugin_ign/images/icon.png'
+        self.iconPathWms = ':/plugins/plugin_ign/images/wms.png'
+        self.iconPathIGN = ':/plugins/plugin_ign/images/150Aniversario.png'
+        self.iconPathTopo = ':/plugins/plugin_ign/images/spain_topo.png'
+                        
         self.add_action(
-            icon_path,
+            self.icon_path,
             text=self.tr(u'IGN CNIG'),
             callback=self.run,
             parent=self.iface.mainWindow())
 
+        toolbar = QToolBar("My main toolbar")
+        toolbar.setIconSize(QSize(25,25))
+        self.iface.mainWindow().addToolBar(toolbar)
+        self.toolBars.append(toolbar) 
+           
+        self.cmbbox = QComboBox()
+        self.cmbbox.setFixedSize(QSize(250,25))
+        self.cmbbox.setEditable(True)
+        self.cmbbox.setToolTip("prueba de texto de ejemplo")
+        self.cmbbox.activated.connect(self.geocoder) # Press intro and select combo value      
+
+        mainMenu = QMenu()          
+        mainMenu.setIcon(QIcon(self.iconPathIGN)) 
+        
+        wmsMenu = self.createQmenu("Sevicios WMS", self.iconPathWms)
+        wmtsMenu = self.createQmenu("Sevicios WMTS", self.iconPathWms)
+       
+        wmsServices = self.convertServicesFromFilesIntoClasses(wmsFilePath,"wms")
+        wmtsServices = self.convertServicesFromFilesIntoClasses(wmtsFilePath,"wmts")
+        
+        self.putServicesIntoQmenu(wmsServices, wmsMenu)
+        self.putServicesIntoQmenu(wmtsServices, wmtsMenu)
+          
+        mainMenu.addMenu(wmsMenu)  
+        mainMenu.addMenu(wmtsMenu) 
+         
+        self.menus.append((mainMenu.parentWidget,mainMenu))
+        self.menus.append((wmsMenu.parentWidget,wmsMenu))
+        self.menus.append((wmtsMenu.parentWidget,wmtsMenu))
+ 
+        testToolButton = QToolButton()
+        testToolButton.setPopupMode(QToolButton().MenuButtonPopup)
+        testToolButton.setIcon(QIcon(self.iconPathIGN))
+        testToolButton.setMenu(mainMenu)
+         
+        self.toolButtons.append((testToolButton.parentWidget(),testToolButton))
+         
+        self.actions.append((toolbar,toolbar.addWidget(self.cmbbox)))
+        self.actions.append((toolbar,toolbar.addWidget(testToolButton)))
+        
         # will be set False in run()
-        self.first_start = True
+        self.first_start = True    
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
-        for action in self.actions:
-            self.iface.removePluginMenu(
-                self.tr(u'&Plugin IGN '),
-                action)
-            self.iface.removeToolBarIcon(action)
+#         for action in self.actions:
+#             self.iface.removePluginMenu(
+#                 self.tr(u'&Plugin IGN '),
+#                 action)
+#             self.iface.removeToolBarIcon(action)
+            
+        for parent, action in self.actions:            
+             parent.removeAction(action)                    
+        self.actions = []
+                
+        for parent,menu in self.menus:
+            menu.clear()
+        self.menus = []              
+
+        for toolbar in self.toolBars:
+            parent = toolbar.parentWidget()
+            parent.removeToolBar(toolbar)
+            print("Toolbar remove", toolbar.windowTitle())
+            del toolbar
+        self.toolBars = []
+                
+        """Removes the plugin menu item and icon from QGIS GUI."""
+        self.iface.removePluginMenu(self.tr(u'&Plugin IGN'),self.mainAction)        
+        self.iface.removeToolBarIcon(self.mainAction)
+           
+        QgsProject.instance().clear()
 
     def run(self):
 
@@ -197,6 +278,11 @@ class PluginIGN:
             # substitute with your code.
             pass
 
+    def createQmenu(self,menuName, menuIcon):                
+        qmenu = QMenu()   
+        qmenu.setIcon(QIcon(menuIcon))
+        qmenu.setTitle(menuName)         
+        return qmenu
     
     def geocoder(self):         
         #crear clase geocoder y desde alli llamar a la ventana de seleccion si es necesario           

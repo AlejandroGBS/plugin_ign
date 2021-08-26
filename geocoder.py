@@ -31,8 +31,7 @@ import json
 from pyproj import Proj, transform
 import re
 from enum import Enum
-from moduloborrar import  moduloborrar_dialog
-from .moduloborrar_dialog import borrarDialog
+from .geocoder_dialog import GeocoderDialog
 
 
 class Geocoder:
@@ -48,7 +47,7 @@ class Geocoder:
         x, y, epsg = self.isCoordinates(query)
         if not (x != None and y != None and epsg != None) :
             addresses = self.getCandidatesInJson(query) #"calle iglesia 5, madrid")
-            ventana = borrarDialog(parent=self.iface.mainWindow())
+            ventana = GeocoderDialog(parent=self.iface.mainWindow())
             response = ventana.doModal(addresses)
             tcr =ventana.tableWidget.currentRow()
             if response != 0:

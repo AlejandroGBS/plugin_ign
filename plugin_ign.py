@@ -174,8 +174,8 @@ class PluginIGN:
 
         icon_path = ':/plugins/plugin_ign/icon.png'
 
-        wmsFilePath=self.plugin_dir +'/wms.txt'
-        wmtsFilePath=self.plugin_dir +'/wmts.txt'
+        wmsFilePath=self.plugin_dir +'/resources/wms.txt'
+        wmtsFilePath=self.plugin_dir +'/resources/wmts.txt'
         self.icon_path = ':/plugins/plugin_ign/images/icon.png'
         self.iconPathWms = ':/plugins/plugin_ign/images/wms.png'
         self.iconPathIGN = ':/plugins/plugin_ign/images/150Aniversario.png'

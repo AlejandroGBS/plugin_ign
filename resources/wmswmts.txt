@@ -1,0 +1,32 @@
+Elevaciones;https://servicios.idee.es/wmts/mdt
+Ocupación del Suelo;https://servicios.idee.es/wmts/ocupacion-suelo
+Ortofotos PNOA;https://www.ign.es/wmts/pnoa-ma
+Cartografía raster;https://www.ign.es/wmts/mapa-raster
+Planos de Madrid (1622 - 1960);https://www.ign.es/wmts/planos
+Primera edición de los Mapas Topográficos Nacionales;https://www.ign.es/wmts/primera-edicion-mtn
+
+
+
+Copernicus Land Monitoring Service Copernicus Land Monitoring Service; 	https://servicios.idee.es/wms/copernicus-landservice-spain
+Direcciones y Códigos Postales;https://www.cartociudad.es/wms-inspire/direcciones-ccpp
+Hidrografía - Información Geográfica de Referencia;https://servicios.idee.es/wms-inspire/hidrografia
+Mapa base;https://www.ign.es/wms-inspire/ign-base
+Modelos Digitales del Terreno;https://servicios.idee.es/wms-inspire/mdt
+Ocupación del Suelo;https://servicios.idee.es/wms-inspire/ocupacion-suelo
+Ocupación de Suelo histórico;https://servicios.idee.es/wms-inspire/ocupacion-suelo-historico
+Ortofotos históricas;https://www.ign.es/wms/pnoa-historico
+Ortofotos máxima actualidad del PNOA;https://www.ign.es/wms-inspire/pnoa-ma
+Redes de transporte;https://servicios.idee.es/wms-inspire/transportes
+Camino de Santiago;https://www.ign.es/wms-inspire/camino-santiago
+Cartografía raster;https://www.ign.es/wms-inspire/mapa-raster
+Cuadrículas cartográficas;https://www.ign.es/wms-inspire/cuadriculas
+Fototeca;https://wms-fototeca.idee.es/fototeca
+Hojas kilométricas (Madrid - 1860);https://www.ign.es/wms/hojas-kilometricas
+Información sísmica y volcánica;https://www.ign.es/wms-inspire/geofisica
+Nombres Geográficos;https://www.ign.es/wms-inspire/ngbe
+Planimetrías;https://www.ign.es/wms/minutas-cartograficas
+Planos de Madrid (1622 - 1960);https://www.ign.es/wms/planos
+Primera edición de los Mapas Topográficos Nacionales;https://www.ign.es/wms/primera-edicion-mtn
+Proyecto ELF España;http://elf.ign.es/wms/basemap
+Redes geodésicas;https://www.ign.es/wms-inspire/redes-geodesicas
+Unidades administrativas;https://www.ign.es/wms-inspire/unidades-administrativas

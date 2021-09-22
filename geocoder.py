@@ -44,6 +44,7 @@ class Geocoder:
         
     
     def find(self,query):
+        coord = None
         x, y, epsg = self.isCoordinates(query)
         if not (x != None and y != None and epsg != None) :
             addresses = self.getCandidatesInJson(query) #"calle iglesia 5, madrid")

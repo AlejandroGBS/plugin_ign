@@ -172,11 +172,10 @@ class PluginIGN:
     def initGui(self):
         """Create the menu entries and toolbar icons inside the QGIS GUI."""
 
-        icon_path = ':/plugins/plugin_ign/150Aniversario.png'
 
         wmsFilePath=self.plugin_dir +'/resources/wms.txt'
         wmtsFilePath=self.plugin_dir +'/resources/wmts.txt'
-        self.icon_path = ':/plugins/plugin_ign/images/icon.png'
+        self.icon_path = ':/plugins/plugin_ign/images/150Aniversario.png'
         self.iconPathWms = ':/plugins/plugin_ign/images/wms.png'
         self.iconPathIGN = ':/plugins/plugin_ign/images/150Aniversario.png'
         self.iconPathTopo = ':/plugins/plugin_ign/images/spain_topo.png'

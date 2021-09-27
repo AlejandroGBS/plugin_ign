@@ -309,19 +309,25 @@ class PluginIGN:
             for line in lines:
                 serviceNameAndUrl = line.split(";")
                 wms = Wms(self.iface,self.iconPathTopo,serviceNameAndUrl[0],serviceNameAndUrl[1])
-                layers = wms.getLayersFromUrlService(serviceNameAndUrl[1])
-                for layer in layers:
-                   wms.layers.append(layer) 
-                services.append(wms)
+                try:
+                    layers = wms.getLayersFromUrlService(serviceNameAndUrl[1])
+                    for layer in layers:
+                        wms.layers.append(layer) 
+                        services.append(wms)
+                except:
+                    print("No ha podido cargarse el servicio WMS: "+ serviceNameAndUrl)
         else: #serviceType == "wmts":
             lines = file.readlines()
             for line in lines:
                  serviceNameAndUrl = line.split(";")
                  wmts = Wmts(self.iface,self.iconPathTopo,serviceNameAndUrl[0],serviceNameAndUrl[1])
-                 layers = wmts.getLayersFromUrlService(serviceNameAndUrl[1])
-                 for layer in layers:
-                     wmts.layers.append(layer)
-                 services.append(wmts)
+                 try:
+                    layers = wmts.getLayersFromUrlService(serviceNameAndUrl[1])
+                    for layer in layers:
+                        wmts.layers.append(layer)
+                        services.append(wmts)
+                 except:
+                    print("No ha podido cargarse el servicio WMTS: "+ serviceNameAndUrl)
 
         file.close()
         

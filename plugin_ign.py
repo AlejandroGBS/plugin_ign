@@ -194,7 +194,7 @@ class PluginIGN:
         self.cmbbox = QComboBox()
         self.cmbbox.setFixedSize(QSize(250,25))
         self.cmbbox.setEditable(True)
-        self.cmbbox.setToolTip("prueba de texto de ejemplo")
+        self.cmbbox.setToolTip("Buscador de lugares tanto por nombres como por coordenadas,\nen este último caso el formato será como el siguiente ejemplo: \nEPSG:4326 -3.65 40.32")
         self.cmbbox.activated.connect(self.geocoder) # Press intro and select combo value      
 
         mainMenu = QMenu()          
@@ -314,8 +314,10 @@ class PluginIGN:
                     for layer in layers:
                         wms.layers.append(layer) 
                         services.append(wms)
-                except:
-                    print("No ha podido cargarse el servicio WMS: "+ serviceNameAndUrl)
+                except Exception:
+                    print("No ha podido cargarse la capa " +layer.name + " del servicio WMS: "+ serviceNameAndUrl[1] )
+                    pass
+
         else: #serviceType == "wmts":
             lines = file.readlines()
             for line in lines:
@@ -326,8 +328,9 @@ class PluginIGN:
                     for layer in layers:
                         wmts.layers.append(layer)
                         services.append(wmts)
-                 except:
-                    print("No ha podido cargarse el servicio WMTS: "+ serviceNameAndUrl)
+                 except Exception:
+                    print("No ha podido cargarse la capa " + layer.name + " del servicio WMTS: "+ serviceNameAndUrl[1] )
+                    pass
 
         file.close()
         

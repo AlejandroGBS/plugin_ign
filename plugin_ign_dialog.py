@@ -26,6 +26,9 @@ import os
 
 from qgis.PyQt import uic
 from qgis.PyQt import QtWidgets
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPalette, QColor, QFontMetrics, QPixmap
+from PyQt5.QtWidgets import QStyle, QDialogButtonBox, QDialog, QApplication
 
 # This loads your .ui file so that PyQt can populate your plugin with the elements from Qt Designer
 FORM_CLASS, _ = uic.loadUiType(os.path.join(
@@ -42,3 +45,20 @@ class PluginIGNDialog(QtWidgets.QDialog, FORM_CLASS):
         # http://qt-project.org/doc/qt-4.8/designer-using-a-ui-file.html
         # #widgets-and-dialogs-with-auto-connect
         self.setupUi(self)
+        self.ui = self
+        
+        self.label_info.setScaledContents(True) 
+        
+        self.label_banner.setScaledContents(True)        
+        self.label_banner.setAlignment(Qt.AlignCenter)
+        self.pixmap_banner = QPixmap(self.label_banner.pixmap())
+        self.resizeBanner()
+
+    def resizeEvent(self, newSize):
+        self.resizeBanner()
+
+    def resizeBanner(self):
+        self.label_banner.resize(self.width(), self.height()/2)
+        self.label_info.resize(self.width() -52, self.height()/2 -10)
+        self.label_info.move(26, self.height()/2)
+        #self.label_banner.setPixmap(self.pixmap_banner.scaled(self.width(), self.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation))

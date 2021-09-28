@@ -112,13 +112,14 @@ class Geocoder:
       
     
     def isCoordinates(self,query):
-        expression = r"^\s*(EPSG:\d+\s+)?([+-]?[0-9]*[.,]?[0-9]+)\s*([+-]?[0-9]*[.,]?[0-9]+)\s+(EPSG:\d+)?\s*$" 
+        expression = r"^\s*(EPSG:\d+\s+)?([+-]?[0-9]*[.,]?[0-9]+)\s*([+-]?[0-9]*[.,]?[0-9]+)\s*(EPSG:\d+)?\s*$" 
         result = re.search(expression, query, re.IGNORECASE)
         if result:
             epsg1, x, y, epsg2 = result.groups()
             epsg = epsg1 if epsg1 else epsg2 if epsg2 else None
             x = float(x.replace(',', '.'))
             y = float(y.replace(',', '.'))
+            epsg = epsg.strip()
         else:
             x, y, epsg = None, None, None
 

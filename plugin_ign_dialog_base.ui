@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Plugin IGN </string>
+   <string>Acerca de..</string>
   </property>
   <widget class="QLabel" name="label_banner">
    <property name="geometry">

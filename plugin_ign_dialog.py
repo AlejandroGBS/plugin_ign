@@ -61,4 +61,3 @@ class PluginIGNDialog(QtWidgets.QDialog, FORM_CLASS):
         self.label_banner.resize(self.width(), self.height()/2)
         self.label_info.resize(self.width() -52, self.height()/2 -10)
         self.label_info.move(26, self.height()/2)
-        #self.label_banner.setPixmap(self.pixmap_banner.scaled(self.width(), self.height(), Qt.KeepAspectRatio, Qt.SmoothTransformation))

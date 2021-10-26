@@ -1,2 +1,4 @@
 Mapa base;https://www.ign.es/wmts/ign-base
 Mapa Lidar;	https://wmts-mapa-lidar.idee.es/lidar
+PNOA MA;https://www.ign.es/wmts/pnoa-ma
+Cartografía raster;https://www.ign.es/wmts/mapa-raster

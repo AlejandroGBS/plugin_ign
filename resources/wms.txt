@@ -1,1 +1,4 @@
 Peligrosidad por Inundación;https://servicios.idee.es/wms-inspire/riesgos-naturales/inundaciones
+PNOA MA;https://www.ign.es/wms-inspire/pnoa-ma
+Mapa base;https://www.ign.es/wms-inspire/ign-base
+Cartografía raster;https://www.ign.es/wms-inspire/mapa-raster
